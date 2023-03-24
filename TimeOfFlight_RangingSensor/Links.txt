@@ -1,0 +1,11 @@
+Main Website
+https://www.sparkfun.com/products/19013
+
+datasheet Sensor Zelf(geen idee of dees nuttig is)
+chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://cdn.sparkfun.com/assets/6/e/3/0/6/vl53l5cx-datasheet.pdf
+
+Hookup_Guide
+https://learn.sparkfun.com/tutorials/qwiic-tof-imager---vl53l5cx-hookup-guide
+
+GitHub Repo
+https://github.com/sparkfun/SparkFun_Qwiic_ToF_Imager_VL53L5CX-Mini
