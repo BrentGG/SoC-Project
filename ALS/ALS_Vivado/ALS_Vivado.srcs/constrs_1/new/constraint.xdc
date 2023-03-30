@@ -1,0 +1,8 @@
+set_property IOSTANDARD LVCMOS33 [get_ports pmodb_pin7_io]
+set_property IOSTANDARD LVCMOS33 [get_ports pmodb_pin8_io]
+set_property IOSTANDARD LVCMOS33 [get_ports pmodb_pin9_io]
+set_property IOSTANDARD LVCMOS33 [get_ports pmodb_pin10_io]
+set_property PACKAGE_PIN V16 [get_ports pmodb_pin7_io]
+set_property PACKAGE_PIN W15 [get_ports pmodb_pin8_io]
+set_property PACKAGE_PIN V12 [get_ports pmodb_pin9_io]
+set_property PACKAGE_PIN W13 [get_ports pmodb_pin10_io]
