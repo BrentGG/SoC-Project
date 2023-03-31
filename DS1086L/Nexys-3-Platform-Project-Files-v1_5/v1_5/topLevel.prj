@@ -1,0 +1,5 @@
+verilog work "C:/Designs/maxim/9_4_2012_nexys/Nexys3_v1_5/v1_5/system/hdl/system.v"
+verilog work "ipcore_dir/dcm.v"
+verilog work "ipcore_dir/dcm/example_design/dcm_exdes.v"
+verilog work "pModPortMuxWithI2C.v"
+verilog work "top.v"
