@@ -1,0 +1,25 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"1.45279",
+   "Default View_TopLeft":"32,-86",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.0r6  2020-01-29 bk=1.5227 VDI=41 GEI=36 GUI=JA:10.0 non-TLS
+#  -string -flagsOSRD
+preplace port port-id_d_out_0 -pg 1 -lvl 4 -x 740 -y 180 -defaultsOSRD
+preplace port port-id_clk_in1_0 -pg 1 -lvl 0 -x -10 -y 160 -defaultsOSRD
+preplace inst blk_mem_gen_0 -pg 1 -lvl 3 -x 620 -y 100 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 110 -y 160 -defaultsOSRD
+preplace inst NeoPixel_0 -pg 1 -lvl 2 -x 360 -y 90 -defaultsOSRD
+preplace inst xlslice_0 -pg 1 -lvl 2 -x 360 -y 200 -defaultsOSRD
+preplace netloc NeoPixel_0_addr 1 2 1 510 80n
+preplace netloc NeoPixel_0_d_out 1 2 2 490J 190 720J
+preplace netloc clk_in1_0_1 1 0 1 N 160
+preplace netloc clk_wiz_0_clk_out1 1 1 1 210 80n
+preplace netloc clk_wiz_0_clk_out2 1 1 2 200J 0 520
+preplace netloc blk_mem_gen_0_douta 1 1 2 220 10 500J
+preplace netloc xlslice_0_Dout 1 1 2 230 20 480
+levelinfo -pg 1 -10 110 360 620 740
+pagesize -pg 1 -db -bbox -sgen -120 -110 840 260
+"
+}
+0
