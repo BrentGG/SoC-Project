@@ -181,3 +181,5 @@ ipshared
 #!*.dcp
 
 # End of https://www.toptal.com/developers/gitignore/api/vivado,xilinxvivado,xilinx
+
+!*.pdf
