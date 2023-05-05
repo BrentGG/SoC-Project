@@ -123,7 +123,6 @@ set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
   set_param chipscope.maxJobs 2
-  set_param xicom.use_bs_reader 1
 OPTRACE "create in-memory project" START { }
   create_project -in_memory -part xc7z020clg400-1
   set_property board_part_repo_paths {C:/Users/brent/AppData/Roaming/Xilinx/Vivado/2022.1/xhub/board_store/xilinx_board_store} [current_project]
@@ -136,7 +135,7 @@ OPTRACE "set parameters" START { }
   set_property parent.project_path C:/Users/brent/Desktop/PXLocal/SOC/SoC_FSM_ROM_Neopixel/RGBVivado.xpr [current_project]
   set_property ip_output_repo C:/Users/brent/Desktop/PXLocal/SOC/SoC_FSM_ROM_Neopixel/RGBVivado.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
-  set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
+  set_property XPM_LIBRARIES {XPM_CDC XPM_FIFO XPM_MEMORY} [current_project]
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
   add_files -quiet C:/Users/brent/Desktop/PXLocal/SOC/SoC_FSM_ROM_Neopixel/RGBVivado.runs/synth_1/design_1_wrapper.dcp
@@ -312,8 +311,9 @@ set rc [catch {
   create_msg_db write_bitstream.pb
 OPTRACE "read constraints: write_bitstream" START { }
 OPTRACE "read constraints: write_bitstream" END { }
-  set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
+  set_property XPM_LIBRARIES {XPM_CDC XPM_FIFO XPM_MEMORY} [current_project]
   catch { write_mem_info -force -no_partial_mmi design_1_wrapper.mmi }
+  catch { write_bmm -force design_1_wrapper_bd.bmm }
 OPTRACE "write_bitstream setup" END { }
 OPTRACE "write_bitstream" START { }
   write_bitstream -force design_1_wrapper.bit 
