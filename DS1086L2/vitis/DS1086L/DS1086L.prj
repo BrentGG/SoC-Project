@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="DS1086L" location="C:/Users/boghe/Documents_pc/systemOnChip/github/SoC-Project/DS1086L2/vitis/DS1086L" platform="C:/Users/boghe/Documents_pc/systemOnChip/github/SoC-Project/DS1086L2/vitis/DS1086L2/export/DS1086L2/DS1086L2.xpfm" platformUID="xilinx:pynq-z2::0.0(custom)" systemProject="DS1086L_system" sysConfig="DS1086L2" runtime="cpp" cpu="standalone_ps7_cortexa9_0" cpuInstance="ps7_cortexa9_0" os="standalone" mssSignature="24704c6bc0f145fd554f088475a5c812">
+  <configuration name="Debug" id="xilinx.gnu.armv7.exe.debug.1220933563" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <configuration name="Release" id="xilinx.gnu.armv7.exe.release.2024390593" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <template appTemplateName="hello_world"/>
+</sdkproject:SdkProject>
