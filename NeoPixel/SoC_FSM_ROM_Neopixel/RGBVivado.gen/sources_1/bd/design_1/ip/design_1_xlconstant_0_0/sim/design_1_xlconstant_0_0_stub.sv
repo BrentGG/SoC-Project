@@ -63,7 +63,7 @@ typedef bit bit_as_bool;
 
 (* SC_MODULE_EXPORT *)
 module design_1_xlconstant_0_0 (
-  output bit [25 : 0 ] dout
+  output bit [19 : 0 ] dout
 );
 endmodule
 `endif
@@ -73,14 +73,14 @@ endmodule
 module design_1_xlconstant_0_0 (dout)
 (* integer foreign = "SystemC";
 *);
- output wire [25 : 0 ] dout;  
+ output wire [19 : 0 ] dout;  
 endmodule
 `endif
 
 `ifdef RIVIERA
 (* SC_MODULE_EXPORT *)
 module design_1_xlconstant_0_0 (dout)
-  output wire [25 : 0 ] dout;
+  output wire [19 : 0 ] dout;
 endmodule
 `endif
 

@@ -14,13 +14,14 @@
       "blk_mem_gen_0": "",
       "clk_wiz_0": "",
       "NeoPixel_0": "",
-      "xlslice_0": "",
-      "xlconcat_0": "",
-      "xlconstant_0": "",
       "processing_system7_0": "",
       "axi_bram_ctrl_0": "",
       "axi_smc": "",
-      "rst_ps7_0_100M": ""
+      "rst_ps7_0_100M": "",
+      "xlslice_0": "",
+      "xlconcat_0": "",
+      "xlconstant_0": "",
+      "xlconstant_1": ""
     },
     "interface_ports": {
       "DDR": {
@@ -128,7 +129,7 @@
         "inst_hier_path": "blk_mem_gen_0",
         "parameters": {
           "Assume_Synchronous_Clk": {
-            "value": "false"
+            "value": "true"
           },
           "EN_SAFETY_CKT": {
             "value": "true"
@@ -190,10 +191,10 @@
             "value": "80.0"
           },
           "CLKOUT1_JITTER": {
-            "value": "360.992"
+            "value": "143.688"
           },
           "CLKOUT1_PHASE_ERROR": {
-            "value": "335.459"
+            "value": "96.948"
           },
           "CLKOUT1_REQUESTED_OUT_FREQ": {
             "value": "50"
@@ -208,7 +209,7 @@
             "value": "120"
           },
           "CLKOUT2_USED": {
-            "value": "true"
+            "value": "false"
           },
           "CLKOUT3_JITTER": {
             "value": "411.350"
@@ -223,28 +224,28 @@
             "value": "false"
           },
           "MMCM_CLKFBOUT_MULT_F": {
-            "value": "24.000"
+            "value": "8.000"
           },
           "MMCM_CLKIN1_PERIOD": {
-            "value": "8.0"
+            "value": "8.000"
           },
           "MMCM_CLKIN2_PERIOD": {
-            "value": "10.0"
+            "value": "10.000"
           },
           "MMCM_CLKOUT0_DIVIDE_F": {
-            "value": "12.000"
+            "value": "20.000"
           },
           "MMCM_CLKOUT1_DIVIDE": {
-            "value": "5"
+            "value": "1"
           },
           "MMCM_CLKOUT2_DIVIDE": {
             "value": "1"
           },
           "MMCM_DIVCLK_DIVIDE": {
-            "value": "5"
+            "value": "1"
           },
           "NUM_OUT_CLKS": {
-            "value": "2"
+            "value": "1"
           },
           "PRIM_IN_FREQ": {
             "value": "125"
@@ -288,7 +289,7 @@
           },
           "addr": {
             "direction": "O",
-            "left": "5",
+            "left": "11",
             "right": "0"
           },
           "value": {
@@ -298,48 +299,6 @@
           },
           "d_out": {
             "direction": "O"
-          }
-        }
-      },
-      "xlslice_0": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "xci_name": "design_1_xlslice_0_0",
-        "xci_path": "ip\\design_1_xlslice_0_0\\design_1_xlslice_0_0.xci",
-        "inst_hier_path": "xlslice_0",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "23"
-          },
-          "DIN_TO": {
-            "value": "0"
-          },
-          "DOUT_WIDTH": {
-            "value": "24"
-          }
-        }
-      },
-      "xlconcat_0": {
-        "vlnv": "xilinx.com:ip:xlconcat:2.1",
-        "xci_name": "design_1_xlconcat_0_0",
-        "xci_path": "ip\\design_1_xlconcat_0_0\\design_1_xlconcat_0_0.xci",
-        "inst_hier_path": "xlconcat_0",
-        "parameters": {
-          "NUM_PORTS": {
-            "value": "2"
-          }
-        }
-      },
-      "xlconstant_0": {
-        "vlnv": "xilinx.com:ip:xlconstant:1.1",
-        "xci_name": "design_1_xlconstant_0_0",
-        "xci_path": "ip\\design_1_xlconstant_0_0\\design_1_xlconstant_0_0.xci",
-        "inst_hier_path": "xlconstant_0",
-        "parameters": {
-          "CONST_VAL": {
-            "value": "0"
-          },
-          "CONST_WIDTH": {
-            "value": "26"
           }
         }
       },
@@ -2157,6 +2116,49 @@
         "xci_name": "design_1_rst_ps7_0_100M_0",
         "xci_path": "ip\\design_1_rst_ps7_0_100M_0\\design_1_rst_ps7_0_100M_0.xci",
         "inst_hier_path": "rst_ps7_0_100M"
+      },
+      "xlslice_0": {
+        "vlnv": "xilinx.com:ip:xlslice:1.0",
+        "xci_name": "design_1_xlslice_0_0",
+        "xci_path": "ip\\design_1_xlslice_0_0\\design_1_xlslice_0_0.xci",
+        "inst_hier_path": "xlslice_0",
+        "parameters": {
+          "DIN_FROM": {
+            "value": "23"
+          },
+          "DIN_TO": {
+            "value": "0"
+          },
+          "DOUT_WIDTH": {
+            "value": "24"
+          }
+        }
+      },
+      "xlconcat_0": {
+        "vlnv": "xilinx.com:ip:xlconcat:2.1",
+        "xci_name": "design_1_xlconcat_0_0",
+        "xci_path": "ip\\design_1_xlconcat_0_0\\design_1_xlconcat_0_0.xci",
+        "inst_hier_path": "xlconcat_0"
+      },
+      "xlconstant_0": {
+        "vlnv": "xilinx.com:ip:xlconstant:1.1",
+        "xci_name": "design_1_xlconstant_0_0",
+        "xci_path": "ip\\design_1_xlconstant_0_0\\design_1_xlconstant_0_0.xci",
+        "inst_hier_path": "xlconstant_0",
+        "parameters": {
+          "CONST_VAL": {
+            "value": "0"
+          },
+          "CONST_WIDTH": {
+            "value": "20"
+          }
+        }
+      },
+      "xlconstant_1": {
+        "vlnv": "xilinx.com:ip:xlconstant:1.1",
+        "xci_name": "design_1_xlconstant_1_0",
+        "xci_path": "ip\\design_1_xlconstant_1_0\\design_1_xlconstant_1_0.xci",
+        "inst_hier_path": "xlconstant_1"
       }
     },
     "interface_nets": {
@@ -2195,7 +2197,7 @@
       "NeoPixel_0_addr": {
         "ports": [
           "NeoPixel_0/addr",
-          "xlconcat_0/In1"
+          "xlconcat_0/In0"
         ]
       },
       "NeoPixel_0_d_out": {
@@ -2220,12 +2222,6 @@
         "ports": [
           "clk_wiz_0/clk_out1",
           "NeoPixel_0/clk"
-        ]
-      },
-      "clk_wiz_0_clk_out2": {
-        "ports": [
-          "clk_wiz_0/clk_out2",
-          "blk_mem_gen_0/clkb"
         ]
       },
       "processing_system7_0_FCLK_CLK0": {
@@ -2259,7 +2255,13 @@
       "xlconstant_0_dout": {
         "ports": [
           "xlconstant_0/dout",
-          "xlconcat_0/In0"
+          "xlconcat_0/In1"
+        ]
+      },
+      "xlconstant_1_dout": {
+        "ports": [
+          "xlconstant_1/dout",
+          "blk_mem_gen_0/enb"
         ]
       },
       "xlslice_0_Dout": {
