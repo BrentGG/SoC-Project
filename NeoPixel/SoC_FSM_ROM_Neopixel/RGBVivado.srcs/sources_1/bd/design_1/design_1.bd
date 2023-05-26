@@ -2126,9 +2126,6 @@
           "DIN_FROM": {
             "value": "23"
           },
-          "DIN_TO": {
-            "value": "0"
-          },
           "DOUT_WIDTH": {
             "value": "24"
           }
