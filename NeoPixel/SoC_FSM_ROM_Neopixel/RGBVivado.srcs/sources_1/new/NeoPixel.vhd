@@ -8,7 +8,7 @@ entity NeoPixel is
     );
     Port ( 
         clk      :    in  std_logic;
-        addr     :    out std_logic_vector(5 downto 0);
+        addr     :    out std_logic_vector(11 downto 0);
         value    :    in  std_logic_vector(23 downto 0);
         d_out    :    out std_logic
     );
@@ -26,7 +26,7 @@ architecture Behavioral of NeoPixel is
     signal PS                   : state_type :=reset_state;
     signal NS                   : state_type :=loading_state;
     
-    signal index               : unsigned(5 downto 0)  :=(others=>'0');
+    signal index               : unsigned(11 downto 0)  :=(others=>'0');
    -- signal addr_counter         : unsigned(5 downto 0) :=(others=>'0');
 begin
 
@@ -67,8 +67,8 @@ begin
                                         end if;
                                         NS   <= send_bit_state;
                                     else
-                                        if( index < 63) then
-                                            index   <= index + 1;
+                                        if( index < 255) then
+                                            index   <= index + 4;
                                             NS      <= fetch_addr;
                                         else
                                             delay_low_cntr  := Reset;

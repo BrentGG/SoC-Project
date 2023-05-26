@@ -59,7 +59,7 @@
               &quot;boundary&quot;: {
                 &quot;ports&quot;: {
                   &quot;clk&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
-                  &quot;addr&quot;: [ { &quot;direction&quot;: &quot;out&quot;, &quot;size_left&quot;: &quot;5&quot;, &quot;size_right&quot;: &quot;0&quot; } ],
+                  &quot;addr&quot;: [ { &quot;direction&quot;: &quot;out&quot;, &quot;size_left&quot;: &quot;11&quot;, &quot;size_right&quot;: &quot;0&quot; } ],
                   &quot;value&quot;: [ { &quot;direction&quot;: &quot;in&quot;, &quot;size_left&quot;: &quot;23&quot;, &quot;size_right&quot;: &quot;0&quot; } ],
                   &quot;d_out&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ]
                 },

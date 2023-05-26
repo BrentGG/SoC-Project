@@ -1,8 +1,8 @@
 --Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2022.1 (win64) Build 3526262 Mon Apr 18 15:48:16 MDT 2022
---Date        : Fri Apr 28 17:18:13 2023
---Host        : Laptop-B running 64-bit major release  (build 9200)
+--Date        : Fri May 26 10:13:59 2023
+--Host        : LAPTOP-ISJLH1PH running 64-bit major release  (build 9200)
 --Command     : generate_target design_1.bd
 --Design      : design_1
 --Purpose     : IP block netlist
@@ -38,7 +38,7 @@ entity design_1 is
     d_out_0 : out STD_LOGIC
   );
   attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=10,numReposBlks=10,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=1,da_bram_cntlr_cnt=2,da_ps7_cnt=1,synth_mode=OOC_per_IP}";
+  attribute CORE_GENERATION_INFO of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=11,numReposBlks=11,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=1,da_bram_cntlr_cnt=2,da_ps7_cnt=1,synth_mode=OOC_per_IP}";
   attribute HW_HANDOFF : string;
   attribute HW_HANDOFF of design_1 : entity is "design_1.hwdef";
 end design_1;
@@ -67,36 +67,17 @@ architecture STRUCTURE of design_1 is
   component design_1_clk_wiz_0_0 is
   port (
     clk_in1 : in STD_LOGIC;
-    clk_out1 : out STD_LOGIC;
-    clk_out2 : out STD_LOGIC
+    clk_out1 : out STD_LOGIC
   );
   end component design_1_clk_wiz_0_0;
   component design_1_NeoPixel_0_0 is
   port (
     clk : in STD_LOGIC;
-    addr : out STD_LOGIC_VECTOR ( 5 downto 0 );
+    addr : out STD_LOGIC_VECTOR ( 11 downto 0 );
     value : in STD_LOGIC_VECTOR ( 23 downto 0 );
     d_out : out STD_LOGIC
   );
   end component design_1_NeoPixel_0_0;
-  component design_1_xlslice_0_0 is
-  port (
-    Din : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    Dout : out STD_LOGIC_VECTOR ( 23 downto 0 )
-  );
-  end component design_1_xlslice_0_0;
-  component design_1_xlconcat_0_0 is
-  port (
-    In0 : in STD_LOGIC_VECTOR ( 25 downto 0 );
-    In1 : in STD_LOGIC_VECTOR ( 5 downto 0 );
-    dout : out STD_LOGIC_VECTOR ( 31 downto 0 )
-  );
-  end component design_1_xlconcat_0_0;
-  component design_1_xlconstant_0_0 is
-  port (
-    dout : out STD_LOGIC_VECTOR ( 25 downto 0 )
-  );
-  end component design_1_xlconstant_0_0;
   component design_1_processing_system7_0_0 is
   port (
     USB0_PORT_INDCTL : out STD_LOGIC_VECTOR ( 1 downto 0 );
@@ -301,7 +282,30 @@ architecture STRUCTURE of design_1 is
     peripheral_aresetn : out STD_LOGIC_VECTOR ( 0 to 0 )
   );
   end component design_1_rst_ps7_0_100M_0;
-  signal NeoPixel_0_addr : STD_LOGIC_VECTOR ( 5 downto 0 );
+  component design_1_xlslice_0_0 is
+  port (
+    Din : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    Dout : out STD_LOGIC_VECTOR ( 23 downto 0 )
+  );
+  end component design_1_xlslice_0_0;
+  component design_1_xlconcat_0_0 is
+  port (
+    In0 : in STD_LOGIC_VECTOR ( 11 downto 0 );
+    In1 : in STD_LOGIC_VECTOR ( 19 downto 0 );
+    dout : out STD_LOGIC_VECTOR ( 31 downto 0 )
+  );
+  end component design_1_xlconcat_0_0;
+  component design_1_xlconstant_0_0 is
+  port (
+    dout : out STD_LOGIC_VECTOR ( 19 downto 0 )
+  );
+  end component design_1_xlconstant_0_0;
+  component design_1_xlconstant_1_0 is
+  port (
+    dout : out STD_LOGIC_VECTOR ( 0 to 0 )
+  );
+  end component design_1_xlconstant_1_0;
+  signal NeoPixel_0_addr : STD_LOGIC_VECTOR ( 11 downto 0 );
   signal NeoPixel_0_d_out : STD_LOGIC;
   signal axi_bram_ctrl_0_BRAM_PORTA_ADDR : STD_LOGIC_VECTOR ( 12 downto 0 );
   signal axi_bram_ctrl_0_BRAM_PORTA_CLK : STD_LOGIC;
@@ -344,7 +348,6 @@ architecture STRUCTURE of design_1 is
   signal blk_mem_gen_0_doutb : STD_LOGIC_VECTOR ( 31 downto 0 );
   signal clk_in1_0_1 : STD_LOGIC;
   signal clk_wiz_0_clk_out1 : STD_LOGIC;
-  signal clk_wiz_0_clk_out2 : STD_LOGIC;
   signal processing_system7_0_DDR_ADDR : STD_LOGIC_VECTOR ( 14 downto 0 );
   signal processing_system7_0_DDR_BA : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal processing_system7_0_DDR_CAS_N : STD_LOGIC;
@@ -408,7 +411,8 @@ architecture STRUCTURE of design_1 is
   signal processing_system7_0_M_AXI_GP0_WVALID : STD_LOGIC;
   signal rst_ps7_0_100M_peripheral_aresetn : STD_LOGIC_VECTOR ( 0 to 0 );
   signal xlconcat_0_dout : STD_LOGIC_VECTOR ( 31 downto 0 );
-  signal xlconstant_0_dout : STD_LOGIC_VECTOR ( 25 downto 0 );
+  signal xlconstant_0_dout : STD_LOGIC_VECTOR ( 19 downto 0 );
+  signal xlconstant_1_dout : STD_LOGIC_VECTOR ( 0 to 0 );
   signal xlslice_0_Dout : STD_LOGIC_VECTOR ( 23 downto 0 );
   signal NLW_axi_smc_M00_AXI_arqos_UNCONNECTED : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal NLW_axi_smc_M00_AXI_awqos_UNCONNECTED : STD_LOGIC_VECTOR ( 3 downto 0 );
@@ -459,7 +463,7 @@ begin
   d_out_0 <= NeoPixel_0_d_out;
 NeoPixel_0: component design_1_NeoPixel_0_0
      port map (
-      addr(5 downto 0) => NeoPixel_0_addr(5 downto 0),
+      addr(11 downto 0) => NeoPixel_0_addr(11 downto 0),
       clk => clk_wiz_0_clk_out1,
       d_out => NeoPixel_0_d_out,
       value(23 downto 0) => xlslice_0_Dout(23 downto 0)
@@ -589,13 +593,13 @@ blk_mem_gen_0: component design_1_blk_mem_gen_0_0
       addra(12 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_ADDR(12 downto 0),
       addrb(31 downto 0) => xlconcat_0_dout(31 downto 0),
       clka => axi_bram_ctrl_0_BRAM_PORTA_CLK,
-      clkb => clk_wiz_0_clk_out2,
+      clkb => '0',
       dina(31 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_DIN(31 downto 0),
       dinb(31 downto 0) => B"00000000000000000000000000001000",
       douta(31 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_DOUT(31 downto 0),
       doutb(31 downto 0) => blk_mem_gen_0_doutb(31 downto 0),
       ena => axi_bram_ctrl_0_BRAM_PORTA_EN,
-      enb => '0',
+      enb => xlconstant_1_dout(0),
       rsta => axi_bram_ctrl_0_BRAM_PORTA_RST,
       rsta_busy => NLW_blk_mem_gen_0_rsta_busy_UNCONNECTED,
       rstb => '0',
@@ -606,8 +610,7 @@ blk_mem_gen_0: component design_1_blk_mem_gen_0_0
 clk_wiz_0: component design_1_clk_wiz_0_0
      port map (
       clk_in1 => clk_in1_0_1,
-      clk_out1 => clk_wiz_0_clk_out1,
-      clk_out2 => clk_wiz_0_clk_out2
+      clk_out1 => clk_wiz_0_clk_out1
     );
 processing_system7_0: component design_1_processing_system7_0_0
      port map (
@@ -692,13 +695,17 @@ rst_ps7_0_100M: component design_1_rst_ps7_0_100M_0
     );
 xlconcat_0: component design_1_xlconcat_0_0
      port map (
-      In0(25 downto 0) => xlconstant_0_dout(25 downto 0),
-      In1(5 downto 0) => NeoPixel_0_addr(5 downto 0),
+      In0(11 downto 0) => NeoPixel_0_addr(11 downto 0),
+      In1(19 downto 0) => xlconstant_0_dout(19 downto 0),
       dout(31 downto 0) => xlconcat_0_dout(31 downto 0)
     );
 xlconstant_0: component design_1_xlconstant_0_0
      port map (
-      dout(25 downto 0) => xlconstant_0_dout(25 downto 0)
+      dout(19 downto 0) => xlconstant_0_dout(19 downto 0)
+    );
+xlconstant_1: component design_1_xlconstant_1_0
+     port map (
+      dout(0) => xlconstant_1_dout(0)
     );
 xlslice_0: component design_1_xlslice_0_0
      port map (
