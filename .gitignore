@@ -184,3 +184,4 @@ ipshared
 
 !*.pdf
 !*.zip
+!*.xsa

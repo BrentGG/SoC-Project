@@ -1,0 +1,731 @@
+#include <stdio.h>
+#include <unistd.h>
+#include "platform.h"
+#include "xil_printf.h"
+#include "xbasic_types.h"
+#include "stdio.h"
+#include "xiic_l.h"
+#include "PmodALS.h"
+#include "xil_cache.h"
+#include "xil_types.h"
+#include "xparameters.h"
+#include "xbram.h"
+#include "xgpio.h"
+
+// Neopixel
+#define BRAM_BASE_ADDR XPAR_AXI_BRAM_CTRL_0_S_AXI_BASEADDR
+
+// GPIO
+#define BTN3_MASK 0b1000
+#define BTN2_MASK 0b0100
+#define BTN1_MASK 0b0010
+#define BTN0_MASK 0b0001
+#define SWT1_MASK 0b10
+#define SWT0_MASK 0b01
+#define GPIO_DEVICE_ID  XPAR_GPIO_0_DEVICE_ID
+#define BTN_CHANNEL 1
+#define SWT_CHANNEL 2
+XGpio gpio;
+
+// Oscillator
+#define DS1086L_IIC_ADDRESS 0x58
+
+unsigned int unDacValue=0;
+unsigned int unPrescalarValue=0;
+unsigned int unJitterValue=0;
+int nOffsetDelta=0;
+
+int max_DS1086_get_dac(u32 unPeripheralAddressI2C, unsigned int *unDacValue);
+int max_DS1086_get_prescalar(u32 unPeripheralAddressI2C, unsigned int *unPreScalarValue);
+int max_DS1086_get_jitter(u32 unPeripheralAddressI2C, unsigned int *unJitterValue);
+int max_DS1086_get_offset_delta(u32 unPeripheralAddressI2C,  int *nOffsetDelta);
+
+int max_DS1086_set_dac(u32 unPeripheralAddressI2C, unsigned int unDacValue);
+int max_DS1086_set_prescalar(u32 unPeripheralAddressI2C, unsigned int unPreScalarValue);
+int max_DS1086_set_jitter(u32 unPeripheralAddressI2C, unsigned int unJitterValue);
+int max_DS1086_set_offset_delta(u32 unPeripheralAddressI2C,  int nOffsetDelta);
+
+void redrawOffset(int offset);
+void redrawPrescale(int prescale);
+void redrawDac(int dac);
+void redrawMode(int mode);
+
+// Light Sensor
+void DemoInitialize();
+void DemoRun();
+void DemoCleanup();
+void EnableCaches();
+void DisableCaches();
+
+PmodALS ALS;
+
+int main(void) {
+   DemoInitialize();
+   DemoRun();
+   DemoCleanup();
+   return 0;
+}
+
+void DemoInitialize() {
+   EnableCaches();
+   ALS_begin(&ALS, XPAR_PMODALS_0_AXI_LITE_SPI_BASEADDR);
+}
+
+void DemoRun() {
+	int lightSensorMode = 1;
+
+	// GPIO
+	int status;
+	status = XGpio_Initialize(&gpio, GPIO_DEVICE_ID);
+	if (status != XST_SUCCESS) {
+		xil_printf("Gpio Initialization Failed\r\n");
+		return XST_FAILURE;
+	}
+
+	// Light Sensor
+	u8 light = 0;
+	int rollingAvg[10] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+	for (int i = 0; i < 10; ++i)
+	   rollingAvg[i] = ALS_read(&ALS);
+
+	// Oscillator
+	int offsetValue = -6; // min = -1, max = 6
+	int prescaleValue = 1; // min = 1, max = 8
+	int dacValue = 0; // min = 0, max = 1023 (in our case we use 1014 as max because we have 39 leds left and 39 * 26 = 1000)
+	int mode = 0;
+	int update = 1;
+
+	while (1) {
+		u32 dataSwitches = XGpio_DiscreteRead(&gpio, SWT_CHANNEL);
+		if ((dataSwitches & SWT1_MASK) == 0) { // SW1 off -> light sensor mode
+			lightSensorMode = 1;
+
+			light = ALS_read(&ALS);
+			//xil_printf("Light = %d\n\r", light);
+
+			int avgLight = 0;
+			for (int i = 0; i < 9; ++i) {
+				rollingAvg[i] = rollingAvg[i + 1];
+				avgLight += rollingAvg[i + 1];
+			}
+			rollingAvg[9] = light;
+			avgLight += light;
+			avgLight /= 10;
+
+			int lightConverted = (int)(((float) avgLight) / 255 * 63);
+			if (avgLight > 250)
+				lightConverted = 63;
+			else if (avgLight < 5)
+				lightConverted = -1;
+			for (int i = 0; i < 64; ++i) {
+				if (i > lightConverted)
+					XBram_WriteReg (BRAM_BASE_ADDR, i * 4, 0x00000000);
+				else
+					XBram_WriteReg (BRAM_BASE_ADDR, i * 4, 0x00000004);
+			}
+
+			usleep(50 * 1000);
+		} else { // SW1 on -> oscillator mode
+			if (lightSensorMode) {
+				redrawOffset(offsetValue);
+				redrawPrescale(prescaleValue);
+				redrawDac(dacValue);
+				redrawMode(mode);
+				lightSensorMode = 0;
+			}
+
+			if ((dataSwitches & SWT0_MASK) != 0) { // SW0 on -> editing mode
+				if (update == 0) {
+					update = 1;
+					printf("Going into oscillator editing mode.\n");
+				}
+
+				u32 dataButtons = XGpio_DiscreteRead(&gpio, BTN_CHANNEL);
+				if ((dataButtons & BTN3_MASK) != 0) {
+					mode = mode > 0 ? mode - 1 : 0;
+					redrawMode(mode);
+				}
+				else if ((dataButtons & BTN2_MASK) != 0) {
+					mode = mode < 2 ? mode + 1 : 2;
+					redrawMode(mode);
+				}
+				else if ((dataButtons & BTN1_MASK) != 0) {
+					if (mode == 0) {
+						offsetValue = offsetValue > -6 ? offsetValue - 1 : -6;
+						redrawOffset(offsetValue);
+					}
+					else if (mode == 1) {
+						prescaleValue = prescaleValue > 1 ? prescaleValue - 1 : 1;
+						redrawPrescale(prescaleValue);
+					}
+					else {
+						dacValue = dacValue > 0 ? dacValue - 26 : 0;
+						redrawDac(dacValue);
+					}
+				}
+				else if ((dataButtons & BTN0_MASK) != 0) {
+					if (mode == 0) {
+						offsetValue = offsetValue < 6 ? offsetValue + 1 : 6;
+						redrawOffset(offsetValue);
+					}
+					else if (mode == 1) {
+						prescaleValue = prescaleValue < 8 ? prescaleValue + 1 : 8;
+						redrawPrescale(prescaleValue);
+					}
+					else {
+						dacValue = dacValue < 1015 ? dacValue + 26 : 988;
+						redrawDac(dacValue);
+					}
+				}
+			} else { // SW0 off -> out of editing mode
+				if (update == 1) {
+					update = 0;
+
+					int retValDac = max_DS1086_set_dac(XPAR_IIC_0_BASEADDR, dacValue);
+					usleep(100 * 1000);
+					int retValPrescale = max_DS1086_set_prescalar(XPAR_IIC_0_BASEADDR, prescaleValue);
+					usleep(100 * 1000);
+					int retValJitter = max_DS1086_set_jitter(XPAR_IIC_0_BASEADDR, 50100);
+					usleep(100 * 1000);
+					int retValOffset = max_DS1086_set_offset_delta(XPAR_IIC_0_BASEADDR, offsetValue);
+					usleep(100 * 1000);
+
+					max_DS1086_get_dac(XPAR_IIC_0_BASEADDR, &unDacValue);
+					max_DS1086_get_prescalar(XPAR_IIC_0_BASEADDR, &unPrescalarValue);
+					max_DS1086_get_jitter(XPAR_IIC_0_BASEADDR, &unJitterValue);
+					max_DS1086_get_offset_delta(XPAR_IIC_0_BASEADDR, &nOffsetDelta);
+
+					if (retValDac && retValPrescale && retValJitter && retValOffset)
+						printf("Successfully modified oscillator settings.\n");
+					else
+						printf("Could not apply oscillator settings.\n");
+
+					/*printf("Last DAC reading = %d (decimal)\n", unDacValue);
+					printf("Last Jitter Value = %d (decimal)\n", unJitterValue);
+					printf("Last Prescalar Value = %d (decimal)\n", unPrescalarValue);
+					printf("Last Offset Delta Value = %d (decimal)\n\n", nOffsetDelta);*/
+				}
+			}
+
+			usleep(250 * 1000);
+		}
+	}
+}
+
+void redrawOffset(int offset) {
+	int relOffset = offset + 6;
+	for (int i = 1; i < 16; ++i) {
+		if (i <= relOffset)
+			XBram_WriteReg (BRAM_BASE_ADDR, (i + 48) * 4, 0x00000004);
+		else
+			XBram_WriteReg (BRAM_BASE_ADDR, (i + 48) * 4, 0x00000000);
+	}
+}
+
+void redrawPrescale(int prescale) {
+	int relPrescale = prescale - 1;
+	for (int i = 1; i < 8; ++i) {
+		if (i <= relPrescale)
+			XBram_WriteReg (BRAM_BASE_ADDR, (i + 40) * 4, 0x00000400);
+		else
+			XBram_WriteReg (BRAM_BASE_ADDR, (i + 40) * 4, 0x00000000);
+	}
+}
+
+void redrawDac(int dac) {
+	int relDac = dac / 26;
+	for (int i = 1; i < 40; ++i) {
+		if (i <= relDac)
+			XBram_WriteReg (BRAM_BASE_ADDR, i * 4, 0x00040000);
+		else
+			XBram_WriteReg (BRAM_BASE_ADDR, i * 4, 0x00000000);
+	}
+}
+
+void redrawMode(int mode) {
+	XBram_WriteReg (BRAM_BASE_ADDR, 0 * 4, 0x00040000);
+	XBram_WriteReg (BRAM_BASE_ADDR, 40 * 4, 0x00000400);
+	XBram_WriteReg (BRAM_BASE_ADDR, 48 * 4, 0x00000004);
+	if (mode == 0)
+		XBram_WriteReg (BRAM_BASE_ADDR, 48 * 4, 0x00000404);
+	else if (mode == 1)
+		XBram_WriteReg (BRAM_BASE_ADDR, 40 * 4, 0x00000404);
+	else
+		XBram_WriteReg (BRAM_BASE_ADDR, 0 * 4, 0x00000404);
+}
+
+void DemoCleanup() {
+   DisableCaches();
+}
+
+void EnableCaches() {
+#ifdef __MICROBLAZE__
+#ifdef XPAR_MICROBLAZE_USE_ICACHE
+   Xil_ICacheEnable();
+#endif
+#ifdef XPAR_MICROBLAZE_USE_DCACHE
+   Xil_DCacheEnable();
+#endif
+#endif
+}
+
+void DisableCaches() {
+#ifdef __MICROBLAZE__
+#ifdef XPAR_MICROBLAZE_USE_DCACHE
+   Xil_DCacheDisable();
+#endif
+#ifdef XPAR_MICROBLAZE_USE_ICACHE
+   Xil_ICacheDisable();
+#endif
+#endif
+}
+
+int max_DS1086_get_dac(u32 unPeripheralAddressI2C, unsigned int *unDacValue)
+/**
+* \brief       Retrieves the present value of the DAC which drives the DS1086 VCO.
+*
+* \param[in]   unPeripheralAddressI2C    - address of the I2C peripheral in Microblaze memory map
+* \param[out]  *unDacValue               - DAC value from DS1086 is stored at unDacValue
+*/
+{
+	u8 auchTxBuffer[3];
+	u8 auchRxBuffer[3];
+	int nByteCount=0;
+	unsigned int unTemp;
+	int nReturnVal=TRUE;
+
+	auchTxBuffer[0] = 0x08;  // 10-bit DAC (for VCO) register is 0x08
+	auchTxBuffer[1] = 0x00;
+	auchTxBuffer[2] = 0x00;
+
+	nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchTxBuffer, 1, XIIC_STOP);
+	if(nByteCount!=1)
+		nReturnVal=FALSE;
+
+	nByteCount = XIic_Recv(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+			(u8 *)&auchRxBuffer, 2, XIIC_STOP);
+	if(nByteCount!=2)
+		nReturnVal=FALSE;
+
+	if(nReturnVal==TRUE)
+	{
+		unTemp = auchRxBuffer[0];
+		unTemp = unTemp << 2;
+		unTemp |= ((auchRxBuffer[1] & 0xC0) >> 6);
+		*unDacValue = unTemp;
+	}
+
+	return(nReturnVal);
+}
+
+int max_DS1086_get_prescalar(u32 unPeripheralAddressI2C, unsigned int *unPreScalarValue)
+/**
+* \brief       Retrieve the 4-bit prescaler value in the DS1086.
+* \par         Details
+*              The DS1086L output is prescaled (divided down) by a value between 2^0 (=1) and 2^8 (=256).  The
+*              divide ratio is set by the prescaler register.  This is a 4-bit number, although values greater
+*              than 8 are recognized as 8.
+*
+* \param[in]   unPeripheralAddressI2C    - address of the I2C peripheral in Microblaze memory map
+* \param[out]  *unPreScalarValue         - the 4-bit prescaler value retrived is stored at to set
+*
+* \retval      TRUE if operation succeeded
+*/
+{
+	u8 auchTxBuffer[3];
+	u8 auchRxBuffer[3];
+	int nByteCount=0;
+	unsigned int unTemp;
+	int nReturnVal=TRUE;
+
+	// The prescalar 16-bit word carries more data than just the prescalar value (see datasheet)
+	// so we must read the prescalar value and then modify the bits to change the P3..0 bits
+	auchTxBuffer[0] = 0x02;  // Prescalar register is 0x02
+	auchTxBuffer[1] = 0x00;  // NULL
+	auchTxBuffer[2] = 0x00;  // NULL
+
+	nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchTxBuffer, 1, XIIC_STOP);
+	if(nByteCount!=1)
+		nReturnVal=FALSE;
+	nByteCount = XIic_Recv(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchRxBuffer, 2, XIIC_STOP);
+	if(nByteCount!=2)
+		nReturnVal=FALSE;
+
+	// If the read was successful, parse the bits and set the value @ *unPrescalarValue
+	if(nReturnVal==TRUE)
+	{
+		unTemp = (auchRxBuffer[0] & 0x03);
+		unTemp = unTemp << 2;
+		unTemp |= ((auchRxBuffer[1] & 0xC0) >> 6);
+		*unPreScalarValue = unTemp;
+	}
+	return(nReturnVal);
+}
+
+int max_DS1086_get_jitter(u32 unPeripheralAddressI2C, unsigned int *unJitterValue)
+/**
+* \brief       Retrieve the 5-bit jitter register value in the DS1086.
+* \par         Details
+*              This function returns the 5-bit value for the jitter setting.  This number contains the following bits:
+* \n           JS[4:3] = Jitter rate,  JS[2:0] = Jitter percentage
+*
+* \param[in]   unPeripheralAddressI2C    - address of the I2C peripheral in Microblaze memory map
+* \param[out]  *unJitterValue            - the 5-bit jitter value retrived is stored to unJitterValue
+*
+* \retval      TRUE if operation succeeded
+*/
+{
+	u8 auchTxBuffer[3];
+	u8 auchRxBuffer[3];
+	int nByteCount=0;
+	unsigned int unTemp;
+	int nReturnVal=TRUE;
+
+	// The prescalar 16-bit word carries more data than just the prescalar value (see datasheet)
+	// so we must read the prescalar value and then modify the bits to change the P3..0 bits
+	auchTxBuffer[0] = 0x02;  // Prescalar register is 0x02
+	auchTxBuffer[1] = 0x00;  // NULL
+	auchTxBuffer[2] = 0x00;  // NULL
+
+	nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchTxBuffer, 1, XIIC_STOP);
+	if(nByteCount!=1)
+		nReturnVal=FALSE;
+
+	nByteCount = XIic_Recv(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchRxBuffer, 2, XIIC_STOP);
+	if(nByteCount!=2)
+		nReturnVal=FALSE;
+
+	// If the read was successful, parse the bits and set the value @ *unJitterValue
+	if(nReturnVal==TRUE)
+	{
+		unTemp = (auchRxBuffer[0] & 0xF8);  // five MSBs are JS[4:0]
+		unTemp = unTemp >> 3;
+		*unJitterValue = unTemp;
+	}
+	return(nReturnVal);
+}
+
+int max_DS1086_get_offset_delta(u32 unPeripheralAddressI2C,  int *nOffsetDelta)
+/**
+* \brief       Retrieve the 5-bit offset/delta register value in the DS1086.
+*
+* \param[in]   unPeripheralAddressI2C    - address of the I2C peripheral in Microblaze memory map
+* \param[out]  *nOffsetDelta             - the 5-bit offset value retrived is stored to nOffsetDelta
+*
+* \retval      TRUE if operation succeeded
+*/
+{
+	u8 auchTxBuffer[3];
+	u8 auchRxBuffer[3];
+	int nByteCount=0;
+	int nTempRange=0;
+	int nTempOffset=0;
+	int nTempOffsetDelta=0;
+	int nReturnVal=TRUE;
+
+	// Read the Range Register (factory default)
+	auchTxBuffer[0] = 0x37;  // Range register is 0x37
+	auchTxBuffer[1] = 0x00;  // NULL
+	auchTxBuffer[2] = 0x00;  // NULL
+
+	nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchTxBuffer, 1, XIIC_STOP);
+	if(nByteCount!=1)
+		nReturnVal=FALSE;
+	nByteCount = XIic_Recv(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchRxBuffer, 1, XIIC_STOP);
+	if(nByteCount!=1)
+		nReturnVal=FALSE;
+
+	// If the read was successful, read the offset register
+	if(nReturnVal==TRUE)
+	{
+		nTempRange = auchRxBuffer[0] & 0x1F; // LSB 5 bits
+
+		// Read the Offset Register
+		auchTxBuffer[0] = 0x0E;  // Offset register is 0x0E
+		auchTxBuffer[1] = 0x00;  // NULL
+		auchTxBuffer[2] = 0x00;  // NULL
+
+		nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+				(u8 *)&auchTxBuffer, 1, XIIC_STOP);
+		if(nByteCount!=1)
+			nReturnVal=FALSE;
+		nByteCount = XIic_Recv(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+				(u8 *)&auchRxBuffer, 1, XIIC_STOP);
+		if(nByteCount!=1)
+			nReturnVal=FALSE;
+
+		// If the offset register read was successful, subtract the two values to get the offset value
+		if(nReturnVal==TRUE)
+		{
+			nTempOffset=auchRxBuffer[0] & 0x1F;
+			nTempOffsetDelta = nTempOffset - nTempRange;
+			*nOffsetDelta = nTempOffsetDelta;
+		}
+	}
+	return(nReturnVal);
+}
+
+int max_DS1086_set_dac(u32 unPeripheralAddressI2C, unsigned int unDacValue)
+/**
+* \brief       Set the DAC which drives the DS1086 VCO.
+* \par         Details
+*              The DAC within the DS1086 changes the output frequency by approximately 5kHz per step.
+* \n           JS[4:3] = Jitter rate,  JS[2:0] = Jitter percentage*
+* \param[in]   unPeripheralAddressI2C    - address of the I2C peripheral in Microblaze memory map
+* \param[in]   unDacValue                - 10-bit value to store to the DAC register
+*
+* \retval      TRUE if operation succeeded
+*/
+{
+	u8 auchTxBuffer[3];
+	int nByteCount=0;
+	unsigned int unTemp;
+	unsigned int unTempMSB;
+	unsigned int unTempLSB;
+	int nReturnVal=TRUE;
+
+	unTemp=unDacValue;
+
+	if(unTemp>1023)
+		nReturnVal=FALSE;
+	else
+	{
+		// Convert the value to the 10-bit value used in the 1086
+		unTempMSB = (unTemp & 0x03FC);
+		unTempMSB = unTempMSB >> 2;
+		unTempLSB = (unTemp & 0x03);
+		unTempLSB = unTempLSB << 6;
+
+		// Write the new value to the DAC register
+		auchTxBuffer[0] = 0x08;  // 10-bit DAC (for VCO) register is 0x02
+		auchTxBuffer[1] = (u8)unTempMSB;  // Set upper 8 bits of DAC
+		auchTxBuffer[2] = (u8)unTempLSB;  // Set lower 2 bits of DAC
+		nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+			(u8 *)&auchTxBuffer, 3, XIIC_STOP);
+		if(nByteCount!=3)
+			nReturnVal=FALSE;
+	}
+
+	return(nReturnVal);
+}
+
+int max_DS1086_set_prescalar(u32 unPeripheralAddressI2C, unsigned int unPreScalarValue)
+/**
+* \brief       Set the 4-bit prescaler value in the DS1086.
+* \par         Details
+*              The DS1086L output is prescaled (divided down) by a value between 2^0 (=1) and 2^8 (=256).  The
+*              divide ratio is set by the prescaler register.  This is a 4-bit number, although values greater
+*              than 8 are recognized as 8.
+*
+* \param[in]   unPeripheralAddressI2C    - address of the I2C peripheral in Microblaze memory map
+* \param[in]   unPreScalarValue          - 4-bit prescaler value to set
+*
+* \retval      TRUE if operation succeeded
+*/
+{
+	u8 auchTxBuffer[3];
+	u8 auchRxBuffer[3];
+	int nByteCount=0;
+	unsigned int unTemp;
+	unsigned int unTempMSB;
+	unsigned int unTempLSB;
+	int nReturnVal=TRUE;
+
+	// The prescalar 16-bit word carries more data than just the prescalar value (see datasheet)
+	// so we must read the prescalar value and then modify the bits to change the P3..0 bits
+	auchTxBuffer[0] = 0x02;  // Prescalar register is 0x02
+	auchTxBuffer[1] = 0x00;  // NULL
+	auchTxBuffer[2] = 0x00;  // NULL
+
+	nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchTxBuffer, 1, XIIC_STOP);
+	if(nByteCount!=1)
+		nReturnVal=FALSE;
+	nByteCount = XIic_Recv(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchRxBuffer, 2, XIIC_STOP);
+	if(nByteCount!=2)
+		nReturnVal=FALSE;
+
+	// If the read of the prescalar register was successful, set the new value
+	if(nReturnVal==TRUE)
+	{
+		unTempMSB = auchRxBuffer[0];
+		unTempLSB = auchRxBuffer[1];
+
+		// Zero the old bits of the pre-scalar value
+		unTempMSB &= 0xFC;
+		unTempLSB &= 0x3F;
+
+		// PreScalar Value is capped at 8 (per datasheet)
+		unTemp = unPreScalarValue;
+		if(unTemp >= 8)
+			unTemp=8;
+
+		// Set the new bits of the pre-scalar value
+		if((unTemp & 0x08)==0x08)  	// bit 3
+			unTempMSB |= 0x02;
+		if((unTemp & 0x04)==0x04)
+			unTempMSB |= 0x01;
+		if((unTemp & 0x02)==0x02)
+			unTempLSB |= 0x80;
+		if((unTemp & 0x01)==0x01) 	// bit 0
+			unTempLSB |= 0x40;
+
+		// Write the bits back to the pre-scalar register
+		auchTxBuffer[0] = 0x02;  // Prescalar register is 0x02
+		auchTxBuffer[1] = (u8)unTempMSB;
+		auchTxBuffer[2] = (u8)unTempLSB;
+		nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+			(u8 *)&auchTxBuffer, 3, XIIC_STOP);
+		if(nByteCount!=3)
+			nReturnVal=FALSE;
+	}
+
+	return(nReturnVal);
+}
+
+int max_DS1086_set_jitter(u32 unPeripheralAddressI2C, unsigned int unJitterValue)
+/**
+* \brief       Set the 5-bit jitter register value in the DS1086.
+* \par         Details
+*              This function sets the 5-bit value for the jitter setting.  This number contains the following bits:
+* \n           JS[4:3] = Jitter rate,  JS[2:0] = Jitter percentage
+*
+* \param[in]   unPeripheralAddressI2C    - address of the I2C peripheral in Microblaze memory map
+* \param[in]   unJitterValue             - the 5-bit jitter value to set
+*
+* \retval      TRUE if operation succeeded
+*/
+{
+	u8 auchTxBuffer[3];
+	u8 auchRxBuffer[3];
+	int nByteCount=0;
+	unsigned int unTempMSB;
+	unsigned int unTempLSB;
+	int nReturnVal=TRUE;
+
+	// The prescalar 16-bit word carries more data than just the jitter JS[4:0] value (see datasheet)
+	// so we must read the prescalar value and then modify the bits to change the JS[4:0] bits
+	auchTxBuffer[0] = 0x02;  // Prescalar register is 0x02
+	auchTxBuffer[1] = 0x00;  // NULL
+	auchTxBuffer[2] = 0x00;  // NULL
+
+	nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchTxBuffer, 1, XIIC_STOP);
+	if(nByteCount!=1)
+		nReturnVal=FALSE;
+
+	nByteCount = XIic_Recv(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchRxBuffer, 2, XIIC_STOP);
+	if(nByteCount!=2)
+		nReturnVal=FALSE;
+
+	// If the read of the prescalar register was successful, set the new jitter value
+	if(nReturnVal==TRUE)
+	{
+		unTempMSB = auchRxBuffer[0];
+		unTempLSB = auchRxBuffer[1];
+
+		// Zero the old bits of the jitter value (5 MSBs in the MSB byte)
+		unTempMSB &= 0x07;
+
+		// Set the new bits of the jitter value
+		if((unJitterValue & 0x10)==0x10)  	// bit 4
+			unTempMSB |= 0x80;
+		if((unJitterValue & 0x08)==0x08)
+			unTempMSB |= 0x40;
+		if((unJitterValue & 0x04)==0x04)
+			unTempMSB |= 0x20;
+		if((unJitterValue & 0x02)==0x02)
+			unTempMSB |= 0x10;
+		if((unJitterValue & 0x01)==0x01) 	// bit 0
+			unTempMSB |= 0x08;
+
+		// Write the bits back to the pre-scalar register
+		auchTxBuffer[0] = 0x02;  // Prescalar register is 0x02
+		auchTxBuffer[1] = (u8)unTempMSB;
+		auchTxBuffer[2] = (u8)unTempLSB;
+		nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+			(u8 *)&auchTxBuffer, 3, XIIC_STOP);
+		if(nByteCount!=3)
+			nReturnVal=FALSE;
+	}
+
+	return(nReturnVal);
+}
+
+// This function sets the value of the offset/delta register in the DS1086
+// The offset allows the Master Oscillator Base Frequency to be set in a range from ~61.4MHz to ~122.8MHz
+// The offset value needs to be programmed wrt to a factory calibrated RANGE setting (register 0x37)
+// So, this function reads the RANGE setting, and then +/- 6 before setting the OFFSET register (0x0E) with the value
+int max_DS1086_set_offset_delta(u32 unPeripheralAddressI2C,  int nOffsetDelta)
+/**
+* \brief       Set the 5-bit offset register value in the DS1086.
+* \par         Details
+*              The offset allows the Master Oscillator Base Frequency to be set in a range from ~61.4MHz to ~122.8MHz.
+*              The offset value needs to be programmed wrt to a factory calibrated RANGE setting (register 0x37).
+*              This function reads the RANGE setting, and then +/- 6 before setting the OFFSET register (0x0E) with the value
+*
+* \param[in]   unPeripheralAddressI2C    - address of the I2C peripheral in Microblaze memory map
+* \param[out]  nOffsetDelta              - the 5-bit offset value to set
+*
+* \retval      TRUE if operation succeeded
+*/
+{
+	u8 auchTxBuffer[3];
+	u8 auchRxBuffer[3];
+	int nByteCount=0;
+	int nTemp;
+	int nTempOffsetDelta;
+	int nReturnVal=TRUE;
+
+	// Read the Range Register
+	auchTxBuffer[0] = 0x37;  // Prescalar register is 0x02
+	auchTxBuffer[1] = 0x00;  // NULL
+	auchTxBuffer[2] = 0x00;  // NULL
+
+	nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchTxBuffer, 1, XIIC_STOP);
+	if(nByteCount!=1)
+		nReturnVal=FALSE;
+
+	nByteCount = XIic_Recv(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+		(u8 *)&auchRxBuffer, 1, XIIC_STOP);
+	if(nByteCount!=1)
+		nReturnVal=FALSE;
+
+	// If the read was successful, parse the bits and set the value @ *unPrescalarValue
+	if(nReturnVal==TRUE)
+	{
+		nTemp = (auchRxBuffer[0] & 0x1F);  // mask off the upper 3 bits (they are unused but always read as one)
+		nTempOffsetDelta = nOffsetDelta;
+
+		// Cap the offset delta at +/-6
+		if(nTempOffsetDelta < -6)
+			nTempOffsetDelta=-6;
+		else if(nTempOffsetDelta > 6)
+			nTempOffsetDelta=6;
+
+		// Calculate the offset Delta value (and then make sure it is a positive number)
+		nTemp = nTemp + nTempOffsetDelta;
+		if(nTemp<0)
+			nTemp=0;
+
+		// Write the offset register
+		auchTxBuffer[0] = 0x0E;  // OFFSET register is 0x0E
+		auchTxBuffer[1] = (u8)nTemp;
+
+		nByteCount = XIic_Send(unPeripheralAddressI2C, DS1086L_IIC_ADDRESS,
+			(u8 *)&auchTxBuffer, 2, XIIC_STOP);
+		if(nByteCount!=2)
+			nReturnVal=FALSE;
+	}
+	return(nReturnVal);
+}

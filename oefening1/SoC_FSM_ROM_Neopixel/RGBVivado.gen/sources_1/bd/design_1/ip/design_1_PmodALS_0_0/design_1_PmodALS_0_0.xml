@@ -787,11 +787,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Fri May 26 13:11:01 UTC 2023</spirit:value>
+            <spirit:value>Sat May 27 09:03:46 UTC 2023</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a7c15dd2</spirit:value>
+            <spirit:value>9:265a8fa6</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -802,7 +802,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a7c15dd2</spirit:value>
+            <spirit:value>9:265a8fa6</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -818,11 +818,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Fri May 26 13:41:05 UTC 2023</spirit:value>
+            <spirit:value>Sat May 27 09:03:46 UTC 2023</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a7c15dd2</spirit:value>
+            <spirit:value>9:265a8fa6</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -837,11 +837,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Fri May 26 13:11:01 UTC 2023</spirit:value>
+            <spirit:value>Sat May 27 09:03:46 UTC 2023</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:082c006f</spirit:value>
+            <spirit:value>9:a176dc60</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -857,11 +857,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Fri May 26 13:41:05 UTC 2023</spirit:value>
+            <spirit:value>Sat May 27 09:03:46 UTC 2023</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:082c006f</spirit:value>
+            <spirit:value>9:a176dc60</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -875,11 +875,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Fri May 26 13:41:05 UTC 2023</spirit:value>
+            <spirit:value>Sat May 27 09:03:46 UTC 2023</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a7c15dd2</spirit:value>
+            <spirit:value>9:265a8fa6</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -893,11 +893,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Fri May 26 13:41:05 UTC 2023</spirit:value>
+            <spirit:value>Sat May 27 09:03:46 UTC 2023</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a7c15dd2</spirit:value>
+            <spirit:value>9:265a8fa6</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -911,11 +911,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Fri May 26 13:42:07 UTC 2023</spirit:value>
+            <spirit:value>Sat May 27 09:05:19 UTC 2023</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a7c15dd2</spirit:value>
+            <spirit:value>9:265a8fa6</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1711,7 +1711,7 @@
     <spirit:parameter>
       <spirit:name>PMOD</spirit:name>
       <spirit:displayName>Pmod</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PMOD" spirit:choiceRef="choice_list_ea284d23">pmodb</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PMOD" spirit:choiceRef="choice_list_ea284d23">pmoda</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>AXI_LITE_SPI_BASEADDR</spirit:name>

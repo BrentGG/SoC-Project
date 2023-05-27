@@ -1,8 +1,8 @@
 --Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2022.1 (win64) Build 3526262 Mon Apr 18 15:48:16 MDT 2022
---Date        : Fri May 26 15:41:00 2023
---Host        : LAPTOP-ISJLH1PH running 64-bit major release  (build 9200)
+--Date        : Sat May 27 12:29:59 2023
+--Host        : DESKTOP-BJUKTU0 running 64-bit major release  (build 9200)
 --Command     : generate_target design_1.bd
 --Design      : design_1
 --Purpose     : IP block netlist
@@ -34,35 +34,43 @@ entity design_1 is
     FIXED_IO_ps_clk : inout STD_LOGIC;
     FIXED_IO_ps_porb : inout STD_LOGIC;
     FIXED_IO_ps_srstb : inout STD_LOGIC;
+    IIC_0_scl_i : in STD_LOGIC;
+    IIC_0_scl_o : out STD_LOGIC;
+    IIC_0_scl_t : out STD_LOGIC;
+    IIC_0_sda_i : in STD_LOGIC;
+    IIC_0_sda_o : out STD_LOGIC;
+    IIC_0_sda_t : out STD_LOGIC;
+    btns_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
     clk_in1_0 : in STD_LOGIC;
     d_out_0 : out STD_LOGIC;
-    pmodb_pin10_i : in STD_LOGIC;
-    pmodb_pin10_o : out STD_LOGIC;
-    pmodb_pin10_t : out STD_LOGIC;
-    pmodb_pin1_i : in STD_LOGIC;
-    pmodb_pin1_o : out STD_LOGIC;
-    pmodb_pin1_t : out STD_LOGIC;
-    pmodb_pin2_i : in STD_LOGIC;
-    pmodb_pin2_o : out STD_LOGIC;
-    pmodb_pin2_t : out STD_LOGIC;
-    pmodb_pin3_i : in STD_LOGIC;
-    pmodb_pin3_o : out STD_LOGIC;
-    pmodb_pin3_t : out STD_LOGIC;
-    pmodb_pin4_i : in STD_LOGIC;
-    pmodb_pin4_o : out STD_LOGIC;
-    pmodb_pin4_t : out STD_LOGIC;
-    pmodb_pin7_i : in STD_LOGIC;
-    pmodb_pin7_o : out STD_LOGIC;
-    pmodb_pin7_t : out STD_LOGIC;
-    pmodb_pin8_i : in STD_LOGIC;
-    pmodb_pin8_o : out STD_LOGIC;
-    pmodb_pin8_t : out STD_LOGIC;
-    pmodb_pin9_i : in STD_LOGIC;
-    pmodb_pin9_o : out STD_LOGIC;
-    pmodb_pin9_t : out STD_LOGIC
+    pmoda_pin10_i : in STD_LOGIC;
+    pmoda_pin10_o : out STD_LOGIC;
+    pmoda_pin10_t : out STD_LOGIC;
+    pmoda_pin1_i : in STD_LOGIC;
+    pmoda_pin1_o : out STD_LOGIC;
+    pmoda_pin1_t : out STD_LOGIC;
+    pmoda_pin2_i : in STD_LOGIC;
+    pmoda_pin2_o : out STD_LOGIC;
+    pmoda_pin2_t : out STD_LOGIC;
+    pmoda_pin3_i : in STD_LOGIC;
+    pmoda_pin3_o : out STD_LOGIC;
+    pmoda_pin3_t : out STD_LOGIC;
+    pmoda_pin4_i : in STD_LOGIC;
+    pmoda_pin4_o : out STD_LOGIC;
+    pmoda_pin4_t : out STD_LOGIC;
+    pmoda_pin7_i : in STD_LOGIC;
+    pmoda_pin7_o : out STD_LOGIC;
+    pmoda_pin7_t : out STD_LOGIC;
+    pmoda_pin8_i : in STD_LOGIC;
+    pmoda_pin8_o : out STD_LOGIC;
+    pmoda_pin8_t : out STD_LOGIC;
+    pmoda_pin9_i : in STD_LOGIC;
+    pmoda_pin9_o : out STD_LOGIC;
+    pmoda_pin9_t : out STD_LOGIC;
+    sws_2bits_tri_i : in STD_LOGIC_VECTOR ( 1 downto 0 )
   );
   attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=12,numReposBlks=12,numNonXlnxBlks=1,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=2,da_bram_cntlr_cnt=2,da_ps7_cnt=1,synth_mode=OOC_per_IP}";
+  attribute CORE_GENERATION_INFO of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=14,numReposBlks=14,numNonXlnxBlks=1,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=5,da_board_cnt=2,da_bram_cntlr_cnt=1,da_ps7_cnt=1,synth_mode=OOC_per_IP}";
   attribute HW_HANDOFF : string;
   attribute HW_HANDOFF of design_1 : entity is "design_1.hwdef";
 end design_1;
@@ -308,7 +316,45 @@ architecture STRUCTURE of design_1 is
     M01_AXI_rdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
     M01_AXI_rresp : in STD_LOGIC_VECTOR ( 1 downto 0 );
     M01_AXI_rvalid : in STD_LOGIC;
-    M01_AXI_rready : out STD_LOGIC
+    M01_AXI_rready : out STD_LOGIC;
+    M02_AXI_awaddr : out STD_LOGIC_VECTOR ( 8 downto 0 );
+    M02_AXI_awprot : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    M02_AXI_awvalid : out STD_LOGIC;
+    M02_AXI_awready : in STD_LOGIC;
+    M02_AXI_wdata : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    M02_AXI_wstrb : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    M02_AXI_wvalid : out STD_LOGIC;
+    M02_AXI_wready : in STD_LOGIC;
+    M02_AXI_bresp : in STD_LOGIC_VECTOR ( 1 downto 0 );
+    M02_AXI_bvalid : in STD_LOGIC;
+    M02_AXI_bready : out STD_LOGIC;
+    M02_AXI_araddr : out STD_LOGIC_VECTOR ( 8 downto 0 );
+    M02_AXI_arprot : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    M02_AXI_arvalid : out STD_LOGIC;
+    M02_AXI_arready : in STD_LOGIC;
+    M02_AXI_rdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    M02_AXI_rresp : in STD_LOGIC_VECTOR ( 1 downto 0 );
+    M02_AXI_rvalid : in STD_LOGIC;
+    M02_AXI_rready : out STD_LOGIC;
+    M03_AXI_awaddr : out STD_LOGIC_VECTOR ( 8 downto 0 );
+    M03_AXI_awprot : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    M03_AXI_awvalid : out STD_LOGIC;
+    M03_AXI_awready : in STD_LOGIC;
+    M03_AXI_wdata : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    M03_AXI_wstrb : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    M03_AXI_wvalid : out STD_LOGIC;
+    M03_AXI_wready : in STD_LOGIC;
+    M03_AXI_bresp : in STD_LOGIC_VECTOR ( 1 downto 0 );
+    M03_AXI_bvalid : in STD_LOGIC;
+    M03_AXI_bready : out STD_LOGIC;
+    M03_AXI_araddr : out STD_LOGIC_VECTOR ( 8 downto 0 );
+    M03_AXI_arprot : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    M03_AXI_arvalid : out STD_LOGIC;
+    M03_AXI_arready : in STD_LOGIC;
+    M03_AXI_rdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    M03_AXI_rresp : in STD_LOGIC_VECTOR ( 1 downto 0 );
+    M03_AXI_rvalid : in STD_LOGIC;
+    M03_AXI_rready : out STD_LOGIC
   );
   end component design_1_axi_smc_0;
   component design_1_rst_ps7_0_100M_0 is
@@ -396,6 +442,62 @@ architecture STRUCTURE of design_1 is
     s_axi_aresetn : in STD_LOGIC
   );
   end component design_1_PmodALS_0_0;
+  component design_1_axi_iic_0_0 is
+  port (
+    s_axi_aclk : in STD_LOGIC;
+    s_axi_aresetn : in STD_LOGIC;
+    iic2intc_irpt : out STD_LOGIC;
+    s_axi_awaddr : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    s_axi_awvalid : in STD_LOGIC;
+    s_axi_awready : out STD_LOGIC;
+    s_axi_wdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    s_axi_wstrb : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    s_axi_wvalid : in STD_LOGIC;
+    s_axi_wready : out STD_LOGIC;
+    s_axi_bresp : out STD_LOGIC_VECTOR ( 1 downto 0 );
+    s_axi_bvalid : out STD_LOGIC;
+    s_axi_bready : in STD_LOGIC;
+    s_axi_araddr : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    s_axi_arvalid : in STD_LOGIC;
+    s_axi_arready : out STD_LOGIC;
+    s_axi_rdata : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    s_axi_rresp : out STD_LOGIC_VECTOR ( 1 downto 0 );
+    s_axi_rvalid : out STD_LOGIC;
+    s_axi_rready : in STD_LOGIC;
+    sda_i : in STD_LOGIC;
+    sda_o : out STD_LOGIC;
+    sda_t : out STD_LOGIC;
+    scl_i : in STD_LOGIC;
+    scl_o : out STD_LOGIC;
+    scl_t : out STD_LOGIC;
+    gpo : out STD_LOGIC_VECTOR ( 0 to 0 )
+  );
+  end component design_1_axi_iic_0_0;
+  component design_1_axi_gpio_0_0 is
+  port (
+    s_axi_aclk : in STD_LOGIC;
+    s_axi_aresetn : in STD_LOGIC;
+    s_axi_awaddr : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    s_axi_awvalid : in STD_LOGIC;
+    s_axi_awready : out STD_LOGIC;
+    s_axi_wdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    s_axi_wstrb : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    s_axi_wvalid : in STD_LOGIC;
+    s_axi_wready : out STD_LOGIC;
+    s_axi_bresp : out STD_LOGIC_VECTOR ( 1 downto 0 );
+    s_axi_bvalid : out STD_LOGIC;
+    s_axi_bready : in STD_LOGIC;
+    s_axi_araddr : in STD_LOGIC_VECTOR ( 8 downto 0 );
+    s_axi_arvalid : in STD_LOGIC;
+    s_axi_arready : out STD_LOGIC;
+    s_axi_rdata : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    s_axi_rresp : out STD_LOGIC_VECTOR ( 1 downto 0 );
+    s_axi_rvalid : out STD_LOGIC;
+    s_axi_rready : in STD_LOGIC;
+    gpio_io_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    gpio2_io_i : in STD_LOGIC_VECTOR ( 1 downto 0 )
+  );
+  end component design_1_axi_gpio_0_0;
   signal NeoPixel_0_addr : STD_LOGIC_VECTOR ( 11 downto 0 );
   signal NeoPixel_0_d_out : STD_LOGIC;
   signal PmodALS_0_Pmod_out_PIN10_I : STD_LOGIC;
@@ -429,6 +531,14 @@ architecture STRUCTURE of design_1 is
   signal axi_bram_ctrl_0_BRAM_PORTA_EN : STD_LOGIC;
   signal axi_bram_ctrl_0_BRAM_PORTA_RST : STD_LOGIC;
   signal axi_bram_ctrl_0_BRAM_PORTA_WE : STD_LOGIC_VECTOR ( 3 downto 0 );
+  signal axi_gpio_0_GPIO2_TRI_I : STD_LOGIC_VECTOR ( 1 downto 0 );
+  signal axi_gpio_0_GPIO_TRI_I : STD_LOGIC_VECTOR ( 3 downto 0 );
+  signal axi_iic_0_IIC_SCL_I : STD_LOGIC;
+  signal axi_iic_0_IIC_SCL_O : STD_LOGIC;
+  signal axi_iic_0_IIC_SCL_T : STD_LOGIC;
+  signal axi_iic_0_IIC_SDA_I : STD_LOGIC;
+  signal axi_iic_0_IIC_SDA_O : STD_LOGIC;
+  signal axi_iic_0_IIC_SDA_T : STD_LOGIC;
   signal axi_smc_M00_AXI_ARADDR : STD_LOGIC_VECTOR ( 12 downto 0 );
   signal axi_smc_M00_AXI_ARBURST : STD_LOGIC_VECTOR ( 1 downto 0 );
   signal axi_smc_M00_AXI_ARCACHE : STD_LOGIC_VECTOR ( 3 downto 0 );
@@ -477,6 +587,40 @@ architecture STRUCTURE of design_1 is
   signal axi_smc_M01_AXI_WREADY : STD_LOGIC;
   signal axi_smc_M01_AXI_WSTRB : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal axi_smc_M01_AXI_WVALID : STD_LOGIC;
+  signal axi_smc_M02_AXI_ARADDR : STD_LOGIC_VECTOR ( 8 downto 0 );
+  signal axi_smc_M02_AXI_ARREADY : STD_LOGIC;
+  signal axi_smc_M02_AXI_ARVALID : STD_LOGIC;
+  signal axi_smc_M02_AXI_AWADDR : STD_LOGIC_VECTOR ( 8 downto 0 );
+  signal axi_smc_M02_AXI_AWREADY : STD_LOGIC;
+  signal axi_smc_M02_AXI_AWVALID : STD_LOGIC;
+  signal axi_smc_M02_AXI_BREADY : STD_LOGIC;
+  signal axi_smc_M02_AXI_BRESP : STD_LOGIC_VECTOR ( 1 downto 0 );
+  signal axi_smc_M02_AXI_BVALID : STD_LOGIC;
+  signal axi_smc_M02_AXI_RDATA : STD_LOGIC_VECTOR ( 31 downto 0 );
+  signal axi_smc_M02_AXI_RREADY : STD_LOGIC;
+  signal axi_smc_M02_AXI_RRESP : STD_LOGIC_VECTOR ( 1 downto 0 );
+  signal axi_smc_M02_AXI_RVALID : STD_LOGIC;
+  signal axi_smc_M02_AXI_WDATA : STD_LOGIC_VECTOR ( 31 downto 0 );
+  signal axi_smc_M02_AXI_WREADY : STD_LOGIC;
+  signal axi_smc_M02_AXI_WSTRB : STD_LOGIC_VECTOR ( 3 downto 0 );
+  signal axi_smc_M02_AXI_WVALID : STD_LOGIC;
+  signal axi_smc_M03_AXI_ARADDR : STD_LOGIC_VECTOR ( 8 downto 0 );
+  signal axi_smc_M03_AXI_ARREADY : STD_LOGIC;
+  signal axi_smc_M03_AXI_ARVALID : STD_LOGIC;
+  signal axi_smc_M03_AXI_AWADDR : STD_LOGIC_VECTOR ( 8 downto 0 );
+  signal axi_smc_M03_AXI_AWREADY : STD_LOGIC;
+  signal axi_smc_M03_AXI_AWVALID : STD_LOGIC;
+  signal axi_smc_M03_AXI_BREADY : STD_LOGIC;
+  signal axi_smc_M03_AXI_BRESP : STD_LOGIC_VECTOR ( 1 downto 0 );
+  signal axi_smc_M03_AXI_BVALID : STD_LOGIC;
+  signal axi_smc_M03_AXI_RDATA : STD_LOGIC_VECTOR ( 31 downto 0 );
+  signal axi_smc_M03_AXI_RREADY : STD_LOGIC;
+  signal axi_smc_M03_AXI_RRESP : STD_LOGIC_VECTOR ( 1 downto 0 );
+  signal axi_smc_M03_AXI_RVALID : STD_LOGIC;
+  signal axi_smc_M03_AXI_WDATA : STD_LOGIC_VECTOR ( 31 downto 0 );
+  signal axi_smc_M03_AXI_WREADY : STD_LOGIC;
+  signal axi_smc_M03_AXI_WSTRB : STD_LOGIC_VECTOR ( 3 downto 0 );
+  signal axi_smc_M03_AXI_WVALID : STD_LOGIC;
   signal blk_mem_gen_0_doutb : STD_LOGIC_VECTOR ( 31 downto 0 );
   signal clk_in1_0_1 : STD_LOGIC;
   signal clk_wiz_0_clk_out1 : STD_LOGIC;
@@ -546,10 +690,16 @@ architecture STRUCTURE of design_1 is
   signal xlconstant_0_dout : STD_LOGIC_VECTOR ( 19 downto 0 );
   signal xlconstant_1_dout : STD_LOGIC_VECTOR ( 0 to 0 );
   signal xlslice_0_Dout : STD_LOGIC_VECTOR ( 23 downto 0 );
+  signal NLW_axi_iic_0_iic2intc_irpt_UNCONNECTED : STD_LOGIC;
+  signal NLW_axi_iic_0_gpo_UNCONNECTED : STD_LOGIC_VECTOR ( 0 to 0 );
   signal NLW_axi_smc_M00_AXI_arqos_UNCONNECTED : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal NLW_axi_smc_M00_AXI_awqos_UNCONNECTED : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal NLW_axi_smc_M01_AXI_arprot_UNCONNECTED : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal NLW_axi_smc_M01_AXI_awprot_UNCONNECTED : STD_LOGIC_VECTOR ( 2 downto 0 );
+  signal NLW_axi_smc_M02_AXI_arprot_UNCONNECTED : STD_LOGIC_VECTOR ( 2 downto 0 );
+  signal NLW_axi_smc_M02_AXI_awprot_UNCONNECTED : STD_LOGIC_VECTOR ( 2 downto 0 );
+  signal NLW_axi_smc_M03_AXI_arprot_UNCONNECTED : STD_LOGIC_VECTOR ( 2 downto 0 );
+  signal NLW_axi_smc_M03_AXI_awprot_UNCONNECTED : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal NLW_blk_mem_gen_0_rsta_busy_UNCONNECTED : STD_LOGIC;
   signal NLW_blk_mem_gen_0_rstb_busy_UNCONNECTED : STD_LOGIC;
   signal NLW_processing_system7_0_USB0_VBUS_PWRSELECT_UNCONNECTED : STD_LOGIC;
@@ -582,32 +732,38 @@ architecture STRUCTURE of design_1 is
   attribute X_INTERFACE_INFO of FIXED_IO_ps_clk : signal is "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_CLK";
   attribute X_INTERFACE_INFO of FIXED_IO_ps_porb : signal is "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_PORB";
   attribute X_INTERFACE_INFO of FIXED_IO_ps_srstb : signal is "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_SRSTB";
+  attribute X_INTERFACE_INFO of IIC_0_scl_i : signal is "xilinx.com:interface:iic:1.0 IIC_0 SCL_I";
+  attribute X_INTERFACE_INFO of IIC_0_scl_o : signal is "xilinx.com:interface:iic:1.0 IIC_0 SCL_O";
+  attribute X_INTERFACE_INFO of IIC_0_scl_t : signal is "xilinx.com:interface:iic:1.0 IIC_0 SCL_T";
+  attribute X_INTERFACE_INFO of IIC_0_sda_i : signal is "xilinx.com:interface:iic:1.0 IIC_0 SDA_I";
+  attribute X_INTERFACE_INFO of IIC_0_sda_o : signal is "xilinx.com:interface:iic:1.0 IIC_0 SDA_O";
+  attribute X_INTERFACE_INFO of IIC_0_sda_t : signal is "xilinx.com:interface:iic:1.0 IIC_0 SDA_T";
   attribute X_INTERFACE_INFO of clk_in1_0 : signal is "xilinx.com:signal:clock:1.0 CLK.CLK_IN1_0 CLK";
   attribute X_INTERFACE_PARAMETER of clk_in1_0 : signal is "XIL_INTERFACENAME CLK.CLK_IN1_0, CLK_DOMAIN design_1_clk_in1_0, FREQ_HZ 125000000, FREQ_TOLERANCE_HZ 0, INSERT_VIP 0, PHASE 0.0";
-  attribute X_INTERFACE_INFO of pmodb_pin10_i : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN10_I";
-  attribute X_INTERFACE_INFO of pmodb_pin10_o : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN10_O";
-  attribute X_INTERFACE_INFO of pmodb_pin10_t : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN10_T";
-  attribute X_INTERFACE_INFO of pmodb_pin1_i : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN1_I";
-  attribute X_INTERFACE_INFO of pmodb_pin1_o : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN1_O";
-  attribute X_INTERFACE_INFO of pmodb_pin1_t : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN1_T";
-  attribute X_INTERFACE_INFO of pmodb_pin2_i : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN2_I";
-  attribute X_INTERFACE_INFO of pmodb_pin2_o : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN2_O";
-  attribute X_INTERFACE_INFO of pmodb_pin2_t : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN2_T";
-  attribute X_INTERFACE_INFO of pmodb_pin3_i : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN3_I";
-  attribute X_INTERFACE_INFO of pmodb_pin3_o : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN3_O";
-  attribute X_INTERFACE_INFO of pmodb_pin3_t : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN3_T";
-  attribute X_INTERFACE_INFO of pmodb_pin4_i : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN4_I";
-  attribute X_INTERFACE_INFO of pmodb_pin4_o : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN4_O";
-  attribute X_INTERFACE_INFO of pmodb_pin4_t : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN4_T";
-  attribute X_INTERFACE_INFO of pmodb_pin7_i : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN7_I";
-  attribute X_INTERFACE_INFO of pmodb_pin7_o : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN7_O";
-  attribute X_INTERFACE_INFO of pmodb_pin7_t : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN7_T";
-  attribute X_INTERFACE_INFO of pmodb_pin8_i : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN8_I";
-  attribute X_INTERFACE_INFO of pmodb_pin8_o : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN8_O";
-  attribute X_INTERFACE_INFO of pmodb_pin8_t : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN8_T";
-  attribute X_INTERFACE_INFO of pmodb_pin9_i : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN9_I";
-  attribute X_INTERFACE_INFO of pmodb_pin9_o : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN9_O";
-  attribute X_INTERFACE_INFO of pmodb_pin9_t : signal is "digilentinc.com:interface:pmod:1.0 pmodb PIN9_T";
+  attribute X_INTERFACE_INFO of pmoda_pin10_i : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN10_I";
+  attribute X_INTERFACE_INFO of pmoda_pin10_o : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN10_O";
+  attribute X_INTERFACE_INFO of pmoda_pin10_t : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN10_T";
+  attribute X_INTERFACE_INFO of pmoda_pin1_i : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN1_I";
+  attribute X_INTERFACE_INFO of pmoda_pin1_o : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN1_O";
+  attribute X_INTERFACE_INFO of pmoda_pin1_t : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN1_T";
+  attribute X_INTERFACE_INFO of pmoda_pin2_i : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN2_I";
+  attribute X_INTERFACE_INFO of pmoda_pin2_o : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN2_O";
+  attribute X_INTERFACE_INFO of pmoda_pin2_t : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN2_T";
+  attribute X_INTERFACE_INFO of pmoda_pin3_i : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN3_I";
+  attribute X_INTERFACE_INFO of pmoda_pin3_o : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN3_O";
+  attribute X_INTERFACE_INFO of pmoda_pin3_t : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN3_T";
+  attribute X_INTERFACE_INFO of pmoda_pin4_i : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN4_I";
+  attribute X_INTERFACE_INFO of pmoda_pin4_o : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN4_O";
+  attribute X_INTERFACE_INFO of pmoda_pin4_t : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN4_T";
+  attribute X_INTERFACE_INFO of pmoda_pin7_i : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN7_I";
+  attribute X_INTERFACE_INFO of pmoda_pin7_o : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN7_O";
+  attribute X_INTERFACE_INFO of pmoda_pin7_t : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN7_T";
+  attribute X_INTERFACE_INFO of pmoda_pin8_i : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN8_I";
+  attribute X_INTERFACE_INFO of pmoda_pin8_o : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN8_O";
+  attribute X_INTERFACE_INFO of pmoda_pin8_t : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN8_T";
+  attribute X_INTERFACE_INFO of pmoda_pin9_i : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN9_I";
+  attribute X_INTERFACE_INFO of pmoda_pin9_o : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN9_O";
+  attribute X_INTERFACE_INFO of pmoda_pin9_t : signal is "digilentinc.com:interface:pmod:1.0 pmoda PIN9_T";
   attribute X_INTERFACE_INFO of DDR_addr : signal is "xilinx.com:interface:ddrx:1.0 DDR ADDR";
   attribute X_INTERFACE_PARAMETER of DDR_addr : signal is "XIL_INTERFACENAME DDR, AXI_ARBITRATION_SCHEME TDM, BURST_LENGTH 8, CAN_DEBUG false, CAS_LATENCY 11, CAS_WRITE_LATENCY 11, CS_ENABLED true, DATA_MASK_ENABLED true, DATA_WIDTH 8, MEMORY_TYPE COMPONENTS, MEM_ADDR_MAP ROW_COLUMN_BANK, SLOT Single, TIMEPERIOD_PS 1250";
   attribute X_INTERFACE_INFO of DDR_ba : signal is "xilinx.com:interface:ddrx:1.0 DDR BA";
@@ -616,33 +772,43 @@ architecture STRUCTURE of design_1 is
   attribute X_INTERFACE_INFO of DDR_dqs_n : signal is "xilinx.com:interface:ddrx:1.0 DDR DQS_N";
   attribute X_INTERFACE_INFO of DDR_dqs_p : signal is "xilinx.com:interface:ddrx:1.0 DDR DQS_P";
   attribute X_INTERFACE_INFO of FIXED_IO_mio : signal is "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO MIO";
+  attribute X_INTERFACE_INFO of btns_4bits_tri_i : signal is "xilinx.com:interface:gpio:1.0 btns_4bits TRI_I";
+  attribute X_INTERFACE_INFO of sws_2bits_tri_i : signal is "xilinx.com:interface:gpio:1.0 sws_2bits TRI_I";
 begin
-  PmodALS_0_Pmod_out_PIN10_I <= pmodb_pin10_i;
-  PmodALS_0_Pmod_out_PIN1_I <= pmodb_pin1_i;
-  PmodALS_0_Pmod_out_PIN2_I <= pmodb_pin2_i;
-  PmodALS_0_Pmod_out_PIN3_I <= pmodb_pin3_i;
-  PmodALS_0_Pmod_out_PIN4_I <= pmodb_pin4_i;
-  PmodALS_0_Pmod_out_PIN7_I <= pmodb_pin7_i;
-  PmodALS_0_Pmod_out_PIN8_I <= pmodb_pin8_i;
-  PmodALS_0_Pmod_out_PIN9_I <= pmodb_pin9_i;
+  IIC_0_scl_o <= axi_iic_0_IIC_SCL_O;
+  IIC_0_scl_t <= axi_iic_0_IIC_SCL_T;
+  IIC_0_sda_o <= axi_iic_0_IIC_SDA_O;
+  IIC_0_sda_t <= axi_iic_0_IIC_SDA_T;
+  PmodALS_0_Pmod_out_PIN10_I <= pmoda_pin10_i;
+  PmodALS_0_Pmod_out_PIN1_I <= pmoda_pin1_i;
+  PmodALS_0_Pmod_out_PIN2_I <= pmoda_pin2_i;
+  PmodALS_0_Pmod_out_PIN3_I <= pmoda_pin3_i;
+  PmodALS_0_Pmod_out_PIN4_I <= pmoda_pin4_i;
+  PmodALS_0_Pmod_out_PIN7_I <= pmoda_pin7_i;
+  PmodALS_0_Pmod_out_PIN8_I <= pmoda_pin8_i;
+  PmodALS_0_Pmod_out_PIN9_I <= pmoda_pin9_i;
+  axi_gpio_0_GPIO2_TRI_I(1 downto 0) <= sws_2bits_tri_i(1 downto 0);
+  axi_gpio_0_GPIO_TRI_I(3 downto 0) <= btns_4bits_tri_i(3 downto 0);
+  axi_iic_0_IIC_SCL_I <= IIC_0_scl_i;
+  axi_iic_0_IIC_SDA_I <= IIC_0_sda_i;
   clk_in1_0_1 <= clk_in1_0;
   d_out_0 <= NeoPixel_0_d_out;
-  pmodb_pin10_o <= PmodALS_0_Pmod_out_PIN10_O;
-  pmodb_pin10_t <= PmodALS_0_Pmod_out_PIN10_T;
-  pmodb_pin1_o <= PmodALS_0_Pmod_out_PIN1_O;
-  pmodb_pin1_t <= PmodALS_0_Pmod_out_PIN1_T;
-  pmodb_pin2_o <= PmodALS_0_Pmod_out_PIN2_O;
-  pmodb_pin2_t <= PmodALS_0_Pmod_out_PIN2_T;
-  pmodb_pin3_o <= PmodALS_0_Pmod_out_PIN3_O;
-  pmodb_pin3_t <= PmodALS_0_Pmod_out_PIN3_T;
-  pmodb_pin4_o <= PmodALS_0_Pmod_out_PIN4_O;
-  pmodb_pin4_t <= PmodALS_0_Pmod_out_PIN4_T;
-  pmodb_pin7_o <= PmodALS_0_Pmod_out_PIN7_O;
-  pmodb_pin7_t <= PmodALS_0_Pmod_out_PIN7_T;
-  pmodb_pin8_o <= PmodALS_0_Pmod_out_PIN8_O;
-  pmodb_pin8_t <= PmodALS_0_Pmod_out_PIN8_T;
-  pmodb_pin9_o <= PmodALS_0_Pmod_out_PIN9_O;
-  pmodb_pin9_t <= PmodALS_0_Pmod_out_PIN9_T;
+  pmoda_pin10_o <= PmodALS_0_Pmod_out_PIN10_O;
+  pmoda_pin10_t <= PmodALS_0_Pmod_out_PIN10_T;
+  pmoda_pin1_o <= PmodALS_0_Pmod_out_PIN1_O;
+  pmoda_pin1_t <= PmodALS_0_Pmod_out_PIN1_T;
+  pmoda_pin2_o <= PmodALS_0_Pmod_out_PIN2_O;
+  pmoda_pin2_t <= PmodALS_0_Pmod_out_PIN2_T;
+  pmoda_pin3_o <= PmodALS_0_Pmod_out_PIN3_O;
+  pmoda_pin3_t <= PmodALS_0_Pmod_out_PIN3_T;
+  pmoda_pin4_o <= PmodALS_0_Pmod_out_PIN4_O;
+  pmoda_pin4_t <= PmodALS_0_Pmod_out_PIN4_T;
+  pmoda_pin7_o <= PmodALS_0_Pmod_out_PIN7_O;
+  pmoda_pin7_t <= PmodALS_0_Pmod_out_PIN7_T;
+  pmoda_pin8_o <= PmodALS_0_Pmod_out_PIN8_O;
+  pmoda_pin8_t <= PmodALS_0_Pmod_out_PIN8_T;
+  pmoda_pin9_o <= PmodALS_0_Pmod_out_PIN9_O;
+  pmoda_pin9_t <= PmodALS_0_Pmod_out_PIN9_T;
 NeoPixel_0: component design_1_NeoPixel_0_0
      port map (
       addr(11 downto 0) => NeoPixel_0_addr(11 downto 0),
@@ -740,6 +906,60 @@ axi_bram_ctrl_0: component design_1_axi_bram_ctrl_0_0
       s_axi_wstrb(3 downto 0) => axi_smc_M00_AXI_WSTRB(3 downto 0),
       s_axi_wvalid => axi_smc_M00_AXI_WVALID
     );
+axi_gpio_0: component design_1_axi_gpio_0_0
+     port map (
+      gpio2_io_i(1 downto 0) => axi_gpio_0_GPIO2_TRI_I(1 downto 0),
+      gpio_io_i(3 downto 0) => axi_gpio_0_GPIO_TRI_I(3 downto 0),
+      s_axi_aclk => processing_system7_0_FCLK_CLK0,
+      s_axi_araddr(8 downto 0) => axi_smc_M03_AXI_ARADDR(8 downto 0),
+      s_axi_aresetn => rst_ps7_0_100M_peripheral_aresetn(0),
+      s_axi_arready => axi_smc_M03_AXI_ARREADY,
+      s_axi_arvalid => axi_smc_M03_AXI_ARVALID,
+      s_axi_awaddr(8 downto 0) => axi_smc_M03_AXI_AWADDR(8 downto 0),
+      s_axi_awready => axi_smc_M03_AXI_AWREADY,
+      s_axi_awvalid => axi_smc_M03_AXI_AWVALID,
+      s_axi_bready => axi_smc_M03_AXI_BREADY,
+      s_axi_bresp(1 downto 0) => axi_smc_M03_AXI_BRESP(1 downto 0),
+      s_axi_bvalid => axi_smc_M03_AXI_BVALID,
+      s_axi_rdata(31 downto 0) => axi_smc_M03_AXI_RDATA(31 downto 0),
+      s_axi_rready => axi_smc_M03_AXI_RREADY,
+      s_axi_rresp(1 downto 0) => axi_smc_M03_AXI_RRESP(1 downto 0),
+      s_axi_rvalid => axi_smc_M03_AXI_RVALID,
+      s_axi_wdata(31 downto 0) => axi_smc_M03_AXI_WDATA(31 downto 0),
+      s_axi_wready => axi_smc_M03_AXI_WREADY,
+      s_axi_wstrb(3 downto 0) => axi_smc_M03_AXI_WSTRB(3 downto 0),
+      s_axi_wvalid => axi_smc_M03_AXI_WVALID
+    );
+axi_iic_0: component design_1_axi_iic_0_0
+     port map (
+      gpo(0) => NLW_axi_iic_0_gpo_UNCONNECTED(0),
+      iic2intc_irpt => NLW_axi_iic_0_iic2intc_irpt_UNCONNECTED,
+      s_axi_aclk => processing_system7_0_FCLK_CLK0,
+      s_axi_araddr(8 downto 0) => axi_smc_M02_AXI_ARADDR(8 downto 0),
+      s_axi_aresetn => rst_ps7_0_100M_peripheral_aresetn(0),
+      s_axi_arready => axi_smc_M02_AXI_ARREADY,
+      s_axi_arvalid => axi_smc_M02_AXI_ARVALID,
+      s_axi_awaddr(8 downto 0) => axi_smc_M02_AXI_AWADDR(8 downto 0),
+      s_axi_awready => axi_smc_M02_AXI_AWREADY,
+      s_axi_awvalid => axi_smc_M02_AXI_AWVALID,
+      s_axi_bready => axi_smc_M02_AXI_BREADY,
+      s_axi_bresp(1 downto 0) => axi_smc_M02_AXI_BRESP(1 downto 0),
+      s_axi_bvalid => axi_smc_M02_AXI_BVALID,
+      s_axi_rdata(31 downto 0) => axi_smc_M02_AXI_RDATA(31 downto 0),
+      s_axi_rready => axi_smc_M02_AXI_RREADY,
+      s_axi_rresp(1 downto 0) => axi_smc_M02_AXI_RRESP(1 downto 0),
+      s_axi_rvalid => axi_smc_M02_AXI_RVALID,
+      s_axi_wdata(31 downto 0) => axi_smc_M02_AXI_WDATA(31 downto 0),
+      s_axi_wready => axi_smc_M02_AXI_WREADY,
+      s_axi_wstrb(3 downto 0) => axi_smc_M02_AXI_WSTRB(3 downto 0),
+      s_axi_wvalid => axi_smc_M02_AXI_WVALID,
+      scl_i => axi_iic_0_IIC_SCL_I,
+      scl_o => axi_iic_0_IIC_SCL_O,
+      scl_t => axi_iic_0_IIC_SCL_T,
+      sda_i => axi_iic_0_IIC_SDA_I,
+      sda_o => axi_iic_0_IIC_SDA_O,
+      sda_t => axi_iic_0_IIC_SDA_T
+    );
 axi_smc: component design_1_axi_smc_0
      port map (
       M00_AXI_araddr(12 downto 0) => axi_smc_M00_AXI_ARADDR(12 downto 0),
@@ -794,6 +1014,44 @@ axi_smc: component design_1_axi_smc_0
       M01_AXI_wready => axi_smc_M01_AXI_WREADY,
       M01_AXI_wstrb(3 downto 0) => axi_smc_M01_AXI_WSTRB(3 downto 0),
       M01_AXI_wvalid => axi_smc_M01_AXI_WVALID,
+      M02_AXI_araddr(8 downto 0) => axi_smc_M02_AXI_ARADDR(8 downto 0),
+      M02_AXI_arprot(2 downto 0) => NLW_axi_smc_M02_AXI_arprot_UNCONNECTED(2 downto 0),
+      M02_AXI_arready => axi_smc_M02_AXI_ARREADY,
+      M02_AXI_arvalid => axi_smc_M02_AXI_ARVALID,
+      M02_AXI_awaddr(8 downto 0) => axi_smc_M02_AXI_AWADDR(8 downto 0),
+      M02_AXI_awprot(2 downto 0) => NLW_axi_smc_M02_AXI_awprot_UNCONNECTED(2 downto 0),
+      M02_AXI_awready => axi_smc_M02_AXI_AWREADY,
+      M02_AXI_awvalid => axi_smc_M02_AXI_AWVALID,
+      M02_AXI_bready => axi_smc_M02_AXI_BREADY,
+      M02_AXI_bresp(1 downto 0) => axi_smc_M02_AXI_BRESP(1 downto 0),
+      M02_AXI_bvalid => axi_smc_M02_AXI_BVALID,
+      M02_AXI_rdata(31 downto 0) => axi_smc_M02_AXI_RDATA(31 downto 0),
+      M02_AXI_rready => axi_smc_M02_AXI_RREADY,
+      M02_AXI_rresp(1 downto 0) => axi_smc_M02_AXI_RRESP(1 downto 0),
+      M02_AXI_rvalid => axi_smc_M02_AXI_RVALID,
+      M02_AXI_wdata(31 downto 0) => axi_smc_M02_AXI_WDATA(31 downto 0),
+      M02_AXI_wready => axi_smc_M02_AXI_WREADY,
+      M02_AXI_wstrb(3 downto 0) => axi_smc_M02_AXI_WSTRB(3 downto 0),
+      M02_AXI_wvalid => axi_smc_M02_AXI_WVALID,
+      M03_AXI_araddr(8 downto 0) => axi_smc_M03_AXI_ARADDR(8 downto 0),
+      M03_AXI_arprot(2 downto 0) => NLW_axi_smc_M03_AXI_arprot_UNCONNECTED(2 downto 0),
+      M03_AXI_arready => axi_smc_M03_AXI_ARREADY,
+      M03_AXI_arvalid => axi_smc_M03_AXI_ARVALID,
+      M03_AXI_awaddr(8 downto 0) => axi_smc_M03_AXI_AWADDR(8 downto 0),
+      M03_AXI_awprot(2 downto 0) => NLW_axi_smc_M03_AXI_awprot_UNCONNECTED(2 downto 0),
+      M03_AXI_awready => axi_smc_M03_AXI_AWREADY,
+      M03_AXI_awvalid => axi_smc_M03_AXI_AWVALID,
+      M03_AXI_bready => axi_smc_M03_AXI_BREADY,
+      M03_AXI_bresp(1 downto 0) => axi_smc_M03_AXI_BRESP(1 downto 0),
+      M03_AXI_bvalid => axi_smc_M03_AXI_BVALID,
+      M03_AXI_rdata(31 downto 0) => axi_smc_M03_AXI_RDATA(31 downto 0),
+      M03_AXI_rready => axi_smc_M03_AXI_RREADY,
+      M03_AXI_rresp(1 downto 0) => axi_smc_M03_AXI_RRESP(1 downto 0),
+      M03_AXI_rvalid => axi_smc_M03_AXI_RVALID,
+      M03_AXI_wdata(31 downto 0) => axi_smc_M03_AXI_WDATA(31 downto 0),
+      M03_AXI_wready => axi_smc_M03_AXI_WREADY,
+      M03_AXI_wstrb(3 downto 0) => axi_smc_M03_AXI_WSTRB(3 downto 0),
+      M03_AXI_wvalid => axi_smc_M03_AXI_WVALID,
       S00_AXI_araddr(31 downto 0) => processing_system7_0_M_AXI_GP0_ARADDR(31 downto 0),
       S00_AXI_arburst(1 downto 0) => processing_system7_0_M_AXI_GP0_ARBURST(1 downto 0),
       S00_AXI_arcache(3 downto 0) => processing_system7_0_M_AXI_GP0_ARCACHE(3 downto 0),

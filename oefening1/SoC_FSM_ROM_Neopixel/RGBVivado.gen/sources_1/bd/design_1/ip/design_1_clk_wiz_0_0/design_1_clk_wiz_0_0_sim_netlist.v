@@ -1,10 +1,10 @@
 // Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2022.1 (win64) Build 3526262 Mon Apr 18 15:48:16 MDT 2022
-// Date        : Fri May 26 09:58:50 2023
-// Host        : LAPTOP-ISJLH1PH running 64-bit major release  (build 9200)
+// Date        : Thu May 25 16:10:38 2023
+// Host        : DESKTOP-BJUKTU0 running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
-//               c:/Users/boghe/Downloads/neopixel/SoC_FSM_ROM_Neopixel/RGBVivado.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0_0/design_1_clk_wiz_0_0_sim_netlist.v
+//               c:/Users/Brent/Desktop/PXLocal/SOC/SoC_FSM_ROM_Neopixel/RGBVivado.gen/sources_1/bd/design_1/ip/design_1_clk_wiz_0_0/design_1_clk_wiz_0_0_sim_netlist.v
 // Design      : design_1_clk_wiz_0_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.

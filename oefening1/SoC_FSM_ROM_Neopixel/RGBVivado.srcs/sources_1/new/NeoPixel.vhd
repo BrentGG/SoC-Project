@@ -27,13 +27,13 @@ architecture Behavioral of NeoPixel is
     signal NS                   : state_type :=loading_state;
     
     signal index               : unsigned(11 downto 0)  :=(others=>'0');
-   -- signal addr_counter         : unsigned(5 downto 0) :=(others=>'0');
+    -- signal addr_counter         : unsigned(5 downto 0) :=(others=>'0');
 begin
 
     sync_proc: process(clk)
     begin
        if rising_edge(clk) then
-            --addr <=std_logic_vector(addr_counter);
+            -- addr <=std_logic_vector(addr_counter);
             PS <= NS;
        end if;
     end process sync_proc;
